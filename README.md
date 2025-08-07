@@ -1,1 +1,1 @@
-# Its the Telemetry Service
+# Telemetry Service

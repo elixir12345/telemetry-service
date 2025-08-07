@@ -21,27 +21,11 @@ const authenticateToken = async (req, res, next) => {
 
     // console.log(user);
 
-    // Check if the session ID is still active
-    const session = user.activeSessions.find(
-      (session) => session.session === decoded.session
-    );
-    if (!session) {
-      return res.status(401).json({ message: "Session expired2" });
-    }
-
     req.user = user;
     next();
   } catch (error) {
     res.status(403).json({ message: "Invalid or expired token" });
   }
-
-  // jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-  //   if (err) {
-  //     return res.status(403).json({ message: "Invalid or expired token" });
-  //   }
-  //   req.user = user;
-  //   next();
-  // });
 };
 
 module.exports = authenticateToken;

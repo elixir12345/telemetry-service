@@ -4,15 +4,16 @@ const http = require("http");
 const { Server } = require("socket.io");
 const rateLimit = require("express-rate-limit");
 const bodyParser = require("body-parser");
+const morgan = require("morgan");
 
 const connectDB = require("./config/db");
 const cors = require("./config/cors");
 const errorHandler = require("./middlewares/errorHandler");
- 
- const telemetryRoutes = require("./routes/v1/telemetryecho");
+
+const telemetryRoutes = require("./routes/v1/telemetryecho");
 
 connectDB();
- 
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -31,8 +32,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(morgan("combined"));
+
 // Routes
- app.use("/api/v1/telemetry", telemetryRoutes);
+app.use("/api/v1/telemetry", telemetryRoutes);
 
 // Error handler
 app.use(errorHandler);
@@ -41,7 +44,7 @@ app.use(errorHandler);
 require("./sockets")(io);
 
 // Server listen
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT || 9002;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 module.exports = { app, server, io };
